@@ -1,0 +1,109 @@
+---
+require:
+  - rubocop-inclusivity
+  - rubocop-performance
+  - rubocop-rails
+  - rubocop-rspec
+  - rubocop-rake
+  - rubocop-thread_safety
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.0.0
+  Exclude:
+    - "bin/**/*"
+    - "vendor/bundle/**/*"
+    - "node_modules/**/*"
+    - "db/schema.rb"
+Lint/EmptyBlock:
+  Exclude:
+    - "spec/**/*"
+
+# There are some cases where a block appears ambiguous to Rubocop but works fine
+# with Rspec. The biggest example I can think of would be for change detection.
+# For this reason, we'll ignore it for the spec directory.
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    - "spec/**/*"
+
+# Code should be limited to 80 columns, but it should never exceed 120 columns.
+Layout/LineLength:
+  Max: 120
+  Exclude:
+    - "db/**/*"
+    - "spec/**/*"
+
+Metrics/AbcSize:
+  Exclude:
+    - "db/**/*"
+
+Metrics/BlockLength:
+  Exclude:
+    - "spec/**/*"
+    - "db/**/*"
+    - "config/routes.rb"
+    - "config/environments/*.rb"
+
+Metrics/ClassLength:
+  Exclude:
+    - "db/**/*"
+
+Metrics/MethodLength:
+  Exclude:
+    - "db/**/*"
+
+Naming/VariableNumber:
+  Enabled: false
+
+# This cop is buggy at the moment. Might be able to re-enable it with an update
+# or something.
+Style/EvalWithLocation:
+  Enabled: false
+
+Rails/NotNullColumn:
+  Enabled: false
+
+Rails/CreateTableWithTimestamps:
+  Enabled: false
+
+Rails/Output:
+  Enabled: false
+
+# This is etestially important because it can break SQL blocks to squish them.
+# For example, if there are SQL comments within the heredoc, such as the case
+# with logidze.
+Rails/SquishedSQLHeredocs:
+  Exclude:
+    - "db/**/*"
+
+Style/Documentation:
+  Exclude:
+    - "db/**/*"
+    - "spec/**/*"
+
+# The length of the examples isn't super important for us. Please be reasonable,
+# though.
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/NamedSubject:
+  Enabled: false
+
+# The amount of expectations probably shouldn't be dictated globally, but we
+# should be reasonable. If we're testing very different items, or if it could
+# be easily described using multiple `it` blocks, we should do so. That said,
+# there are cases where we want to test multiple things within a single `it`
+# block.
+RSpec/MultipleExpectations:
+  Enabled: false
+
+# I don't think limiting the amount of memoized helpers to 5 is a good idea here
+# because some of our routes are nested very deeply and could require a number
+# of helper just to build the route.
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+# Supporting an additional level of nesting is super useful for memoizing multiple
+# variable parameters.
+RSpec/NestedGroups:
+  Max: 5
